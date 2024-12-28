@@ -93,6 +93,9 @@ app.use(express.static("public"));
 app.use(cookieParser());
 app.use(morgan("dev")); //HTTP request logger middleware for node.js 
 
+app.get("/", (req, res) => {
+    res.send("Backend is up and running!");
+});
 
 
 //routes import
