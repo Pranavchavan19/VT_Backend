@@ -195,11 +195,97 @@
 
 // export default app;
 
+
+
+
+
+
+
+
+
+
+
+
+// import express from "express";
+// import cors from "cors";
+// import cookieParser from "cookie-parser";
+// import morgan from "morgan";
+// import dotenv from "dotenv";
+
+// // Load environment variables from .env
+// dotenv.config();
+
+// // Initialize Express app
+// const app = express();
+
+// // CORS configuration (ensure correct CORS_ORIGIN)
+// app.use(
+//     cors({
+//       origin: 'https://vt-frontend-psi.vercel.app', // Only allow requests from your frontend domain
+//       methods: ['GET', 'POST', 'PUT', 'DELETE' , 'PATCH'], // Allow specific HTTP methods
+//       allowedHeaders: ['Content-Type', 'Authorization'], // Allow specific headers
+//       credentials: true, // Allow credentials like cookies
+//     })
+//   );
+
+// // Other middleware
+// app.use(express.json({ limit: "50mb" }));
+// app.use(express.urlencoded({ extended: true, limit: "50mb" }));
+// app.use(cookieParser());
+// app.use(morgan("dev"));  // HTTP request logger
+
+// // Health check route
+// app.get("/", (req, res) => {
+//     res.send("Backend is up and running!");
+// });
+
+// // Import Routes
+// import userRouter from "./routes/user.routes.js";
+// import commentRouter from "./routes/comment.routes.js";
+// import likeRouter from "./routes/like.routes.js";
+// import subscriptionRouter from "./routes/subscription.routes.js";
+// import tweetRouter from "./routes/tweet.routes.js";
+// import videoRouter from "./routes/video.routes.js";
+// import healthcheckRouter from "./routes/healthcheck.routes.js";
+// import playlistRouter from "./routes/playlist.routes.js";
+// import dashboardRouter from "./routes/dashboard.routes.js";
+
+// // Route Declarations
+// app.use("/api/v1/users", userRouter);
+// app.use("/api/v1/comment", commentRouter);
+// app.use("/api/v1/likes", likeRouter);
+// app.use("/api/v1/subscriptions", subscriptionRouter);
+// app.use("/api/v1/tweet", tweetRouter);
+// app.use("/api/v1/video", videoRouter);
+// app.use("/api/v1/healthcheck", healthcheckRouter);
+// app.use("/api/v1/playlist", playlistRouter);
+// app.use("/api/v1/dashboard", dashboardRouter);
+
+// // Export app (useful for testing)
+// export default app;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import dotenv from "dotenv";
+import path from "path";  // Import path module for handling file paths
 
 // Load environment variables from .env
 dotenv.config();
@@ -211,7 +297,7 @@ const app = express();
 app.use(
     cors({
       origin: 'https://vt-frontend-psi.vercel.app', // Only allow requests from your frontend domain
-      methods: ['GET', 'POST', 'PUT', 'DELETE' , 'PATCH'], // Allow specific HTTP methods
+      methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], // Allow specific HTTP methods
       allowedHeaders: ['Content-Type', 'Authorization'], // Allow specific headers
       credentials: true, // Allow credentials like cookies
     })
@@ -250,5 +336,19 @@ app.use("/api/v1/healthcheck", healthcheckRouter);
 app.use("/api/v1/playlist", playlistRouter);
 app.use("/api/v1/dashboard", dashboardRouter);
 
+// Serve static files from the "public" folder (make sure your frontend is in the public folder)
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Catch-all route for frontend (index.html) to handle routes in client-side (React, Vue, etc.)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
 // Export app (useful for testing)
 export default app;
+
+// Start the server (add this if not already in a separate file like "index.js")
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
