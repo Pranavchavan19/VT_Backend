@@ -349,8 +349,4 @@ app.get('*', (req, res) => {
 // Export app (useful for testing)
 export default app;
 
-// Start the server (add this if not already in a separate file like "index.js")
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+
