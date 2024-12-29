@@ -208,22 +208,14 @@ dotenv.config();
 const app = express();
 
 // CORS configuration (ensure correct CORS_ORIGIN)
-app.use((req, res, next) => {
-    console.log("CORS_ORIGIN:", process.env.CORS_ORIGIN); // Log the CORS origin to verify it's being loaded correctly
-
-    // If CORS_ORIGIN is undefined or incorrect, fall back to a default value (useful for debugging)
-    const corsOrigin = process.env.CORS_ORIGIN || 'https://vt-frontend-psi.vercel.app';
-    console.log("Using CORS Origin:", corsOrigin); // Log the final CORS origin being used
-
-    app.use(
-        cors({
-            origin: corsOrigin,  // Set CORS origin to the value from environment variable
-            credentials: true,    // Allows cookies to be sent
-        })
-    );
-
-    next();
-});
+app.use(
+    cors({
+      origin: 'https://vt-frontend-psi.vercel.app', // Only allow requests from your frontend domain
+      methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allow specific HTTP methods
+      allowedHeaders: ['Content-Type', 'Authorization'], // Allow specific headers
+      credentials: true, // Allow credentials like cookies
+    })
+  );
 
 // Other middleware
 app.use(express.json({ limit: "50mb" }));
