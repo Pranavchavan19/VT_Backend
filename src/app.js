@@ -146,7 +146,7 @@ const app = express();
 // CORS configuration (ensure to replace CORS_ORIGIN with the correct URL or hardcode it)
 app.use(
     cors({
-        origin: process.env.CORS_ORIGIN || 'https://vt-frontend-psi.vercel.app', // replace with your frontend URL
+        origin: process.env.CORS_ORIGIN || '*', // replace with your frontend URL
         credentials: true, // Allows cookies to be sent
     })
 );
@@ -189,5 +189,8 @@ app.use("/api/v1/dashboard", dashboardRouter);
 // app.listen(PORT, () => {
 //     console.log(`Server is running on http://localhost:${PORT}`);
 // });
+
+
+console.log('CORS_ORIGIN:', process.env.CORS_ORIGIN); // To verify it's being loaded
 
 export default app;
