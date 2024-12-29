@@ -211,7 +211,7 @@ const app = express();
 app.use(
     cors({
       origin: 'https://vt-frontend-psi.vercel.app', // Only allow requests from your frontend domain
-      methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allow specific HTTP methods
+      methods: ['GET', 'POST', 'PUT', 'DELETE' , 'PATCH'], // Allow specific HTTP methods
       allowedHeaders: ['Content-Type', 'Authorization'], // Allow specific headers
       credentials: true, // Allow credentials like cookies
     })
