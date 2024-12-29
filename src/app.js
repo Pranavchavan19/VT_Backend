@@ -335,6 +335,13 @@ app.use("/api/v1/healthcheck", healthcheckRouter);
 app.use("/api/v1/playlist", playlistRouter);
 app.use("/api/v1/dashboard", dashboardRouter);
 
+// Serve static files from 'public' folder (which will contain your built frontend)
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Always return 'index.html' for any route that isn't found (helps with React routing)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 
 // Export app (useful for testing)
 export default app;
