@@ -146,7 +146,7 @@ const app = express();
 // CORS configuration (ensure to replace CORS_ORIGIN with the correct URL or hardcode it)
 app.use(
     cors({
-        origin: process.env.CORS_ORIGIN || 'http://localhost:5173', // replace with your frontend URL
+        origin: process.env.CORS_ORIGIN || 'https://vt-frontend-psi.vercel.app', // replace with your frontend URL
         credentials: true, // Allows cookies to be sent
     })
 );
