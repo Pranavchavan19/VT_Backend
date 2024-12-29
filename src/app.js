@@ -277,8 +277,6 @@
 
 
 
-
-
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -292,15 +290,18 @@ dotenv.config();
 // Initialize Express app
 const app = express();
 
+// Get the directory name using import.meta.url (fix for ES modules)
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
+
 // CORS configuration (ensure correct CORS_ORIGIN)
 app.use(
     cors({
-      origin: 'https://vt-frontend-psi.vercel.app', // Only allow requests from your frontend domain
-      methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], // Allow specific HTTP methods
-      allowedHeaders: ['Content-Type', 'Authorization'], // Allow specific headers
-      credentials: true, // Allow credentials like cookies
+        origin: 'https://vt-frontend-psi.vercel.app', // Only allow requests from your frontend domain
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], // Allow specific HTTP methods
+        allowedHeaders: ['Content-Type', 'Authorization'], // Allow specific headers
+        credentials: true, // Allow credentials like cookies
     })
-  );
+);
 
 // Other middleware
 app.use(express.json({ limit: "50mb" }));
@@ -335,7 +336,7 @@ app.use("/api/v1/healthcheck", healthcheckRouter);
 app.use("/api/v1/playlist", playlistRouter);
 app.use("/api/v1/dashboard", dashboardRouter);
 
-// Serve static files from 'public' folder (which will contain your built frontend)
+// Serve static files from 'public' folder (which contains 'index.html' and 'temp' folder with other assets)
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Always return 'index.html' for any route that isn't found (helps with React routing)
@@ -345,5 +346,3 @@ app.get('*', (req, res) => {
 
 // Export app (useful for testing)
 export default app;
-
-
