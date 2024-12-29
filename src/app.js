@@ -195,41 +195,48 @@
 
 // export default app;
 
-
-
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import dotenv from "dotenv";
 
-dotenv.config(); // Ensure your environment variables are loaded
+// Load environment variables from .env
+dotenv.config();
 
+// Initialize Express app
 const app = express();
 
-// Log the CORS origin to verify it's correct
-console.log('CORS_ORIGIN:', process.env.CORS_ORIGIN); 
+// CORS configuration (ensure correct CORS_ORIGIN)
+app.use((req, res, next) => {
+    console.log("CORS_ORIGIN:", process.env.CORS_ORIGIN); // Log the CORS origin to verify it's being loaded correctly
 
-// CORS configuration (ensure to replace CORS_ORIGIN with the correct URL or hardcode it)
-app.use(
-    cors({
-        origin: process.env.CORS_ORIGIN || 'https://vt-frontend-psi.vercel.app', // Hardcode the URL for testing
-        credentials: true, // Allows cookies to be sent
-    })
-);
+    // If CORS_ORIGIN is undefined or incorrect, fall back to a default value (useful for debugging)
+    const corsOrigin = process.env.CORS_ORIGIN || 'https://vt-frontend-psi.vercel.app';
+    console.log("Using CORS Origin:", corsOrigin); // Log the final CORS origin being used
 
+    app.use(
+        cors({
+            origin: corsOrigin,  // Set CORS origin to the value from environment variable
+            credentials: true,    // Allows cookies to be sent
+        })
+    );
+
+    next();
+});
+
+// Other middleware
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
-app.use(express.static("public")); // Serve static files from the public folder
 app.use(cookieParser());
-app.use(morgan("dev")); // HTTP request logger middleware for Node.js
+app.use(morgan("dev"));  // HTTP request logger
 
-// Health Check Route
+// Health check route
 app.get("/", (req, res) => {
     res.send("Backend is up and running!");
 });
 
-// Routes Import
+// Import Routes
 import userRouter from "./routes/user.routes.js";
 import commentRouter from "./routes/comment.routes.js";
 import likeRouter from "./routes/like.routes.js";
@@ -251,9 +258,5 @@ app.use("/api/v1/healthcheck", healthcheckRouter);
 app.use("/api/v1/playlist", playlistRouter);
 app.use("/api/v1/dashboard", dashboardRouter);
 
-// Handle preflight requests (CORS preflight check)
-app.options('*', cors());
-
-
-
+// Export app (useful for testing)
 export default app;
