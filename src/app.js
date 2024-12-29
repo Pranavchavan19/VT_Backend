@@ -136,17 +136,84 @@
 
 
 
+// import express from "express";
+// import cors from "cors";
+// import cookieParser from "cookie-parser";
+// import morgan from "morgan";
+
+// const app = express();
+
+// // CORS configuration (ensure to replace CORS_ORIGIN with the correct URL or hardcode it)
+// app.use(
+//     cors({
+//         origin:'https://vt-frontend-psi.vercel.app', // replace with your frontend URL
+//         credentials: true, // Allows cookies to be sent
+//     })
+// );
+
+// app.use(express.json({ limit: "50mb" }));
+// app.use(express.urlencoded({ extended: true, limit: "50mb" }));
+// app.use(express.static("public")); // Serve static files from the public folder
+// app.use(cookieParser());
+// app.use(morgan("dev")); // HTTP request logger middleware for Node.js
+
+// // Health Check Route
+// app.get("/", (req, res) => {
+//     res.send("Backend is up and running!");
+// });
+
+// // Routes Import
+// import userRouter from "./routes/user.routes.js";
+// import commentRouter from "./routes/comment.routes.js";
+// import likeRouter from "./routes/like.routes.js";
+// import subscriptionRouter from "./routes/subscription.routes.js";
+// import tweetRouter from "./routes/tweet.routes.js";
+// import videoRouter from "./routes/video.routes.js";
+// import healthcheckRouter from "./routes/healthcheck.routes.js";
+// import playlistRouter from "./routes/playlist.routes.js";
+// import dashboardRouter from "./routes/dashboard.routes.js";
+
+// // Route Declarations
+// app.use("/api/v1/users", userRouter);
+// app.use("/api/v1/comment", commentRouter);
+// app.use("/api/v1/likes", likeRouter);
+// app.use("/api/v1/subscriptions", subscriptionRouter);
+// app.use("/api/v1/tweet", tweetRouter);
+// app.use("/api/v1/video", videoRouter);
+// app.use("/api/v1/healthcheck", healthcheckRouter);
+// app.use("/api/v1/playlist", playlistRouter);
+// app.use("/api/v1/dashboard", dashboardRouter);
+
+// // // Server Start
+// // const PORT = process.env.PORT || 8000;
+// // app.listen(PORT, () => {
+// //     console.log(`Server is running on http://localhost:${PORT}`);
+// // });
+
+
+// console.log('CORS_ORIGIN:', process.env.CORS_ORIGIN); // To verify it's being loaded
+
+// export default app;
+
+
+
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
+import dotenv from "dotenv";
+
+dotenv.config(); // Ensure your environment variables are loaded
 
 const app = express();
+
+// Log the CORS origin to verify it's correct
+console.log('CORS_ORIGIN:', process.env.CORS_ORIGIN); 
 
 // CORS configuration (ensure to replace CORS_ORIGIN with the correct URL or hardcode it)
 app.use(
     cors({
-        origin: process.env.CORS_ORIGIN || '*', // replace with your frontend URL
+        origin: process.env.CORS_ORIGIN || 'https://vt-frontend-psi.vercel.app', // Hardcode the URL for testing
         credentials: true, // Allows cookies to be sent
     })
 );
@@ -184,13 +251,9 @@ app.use("/api/v1/healthcheck", healthcheckRouter);
 app.use("/api/v1/playlist", playlistRouter);
 app.use("/api/v1/dashboard", dashboardRouter);
 
-// // Server Start
-// const PORT = process.env.PORT || 8000;
-// app.listen(PORT, () => {
-//     console.log(`Server is running on http://localhost:${PORT}`);
-// });
+// Handle preflight requests (CORS preflight check)
+app.options('*', cors());
 
 
-console.log('CORS_ORIGIN:', process.env.CORS_ORIGIN); // To verify it's being loaded
 
 export default app;
