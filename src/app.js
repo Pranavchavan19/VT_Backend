@@ -279,7 +279,6 @@
 
 
 
-
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -335,6 +334,9 @@ app.use("/api/v1/video", videoRouter);
 app.use("/api/v1/healthcheck", healthcheckRouter);
 app.use("/api/v1/playlist", playlistRouter);
 app.use("/api/v1/dashboard", dashboardRouter);
+
+// Create a custom __dirname for ES modules
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
 // Serve static files from the "public" folder (make sure your frontend is in the public folder)
 app.use(express.static(path.join(__dirname, 'public')));
