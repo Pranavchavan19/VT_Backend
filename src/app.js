@@ -219,14 +219,20 @@ dotenv.config();
 const app = express();
 
 // CORS configuration (ensure correct CORS_ORIGIN)
-app.use(
-    cors({
-      origin: 'https://vt-frontend-psi.vercel.app', // Only allow requests from your frontend domain
-      methods: ['GET', 'POST', 'PUT', 'DELETE' , 'PATCH'], // Allow specific HTTP methods
-      allowedHeaders: ['Content-Type', 'Authorization'], // Allow specific headers
-      credentials: true, // Allow credentials like cookies
-    })
-  );
+// app.use(
+//     cors({
+//       origin: 'https://vt-frontend-psi.vercel.app', // Only allow requests from your frontend domain
+//       methods: ['GET', 'POST', 'PUT', 'DELETE' , 'PATCH'], // Allow specific HTTP methods
+//       allowedHeaders: ['Content-Type', 'Authorization'], // Allow specific headers
+//       credentials: true, // Allow credentials like cookies
+//     })
+//   );
+
+
+app.use(cors({
+  origin: 'https://vt-frontend-psi.vercel.app',
+}));
+
 
 // Other middleware
 app.use(express.json({ limit: "50mb" }));
