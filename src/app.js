@@ -282,21 +282,24 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
-import dotenv from "dotenv";
 
-dotenv.config(); // Load environment variables
-
-
-
-// CORS configuration
 const app = express();
 
 app.use(
     cors({
-        origin: process.env.CORS_ORIGIN,
+        origin: process.env.CORS_ORIGIN || "*",
         credentials: true,
     })
 );
+
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ extended: true, limit: "50mb" }));
+app.use(express.static("public"));
+app.use(cookieParser());
+app.use(morgan("dev"));
+
+
+
 // Middleware
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
