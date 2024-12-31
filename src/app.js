@@ -278,31 +278,44 @@
 
 
 
-
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
+import dotenv from "dotenv";
 
-const app = new express();
+dotenv.config(); // Load environment variables
 
+const app = express();
+
+// CORS configuration
+const allowedOrigins = [process.env.CORS_ORIGIN]; // Add your Vercel frontend URL in .env
 app.use(
     cors({
-        origin: process.env.CORS_ORIGIN,
+        origin: (origin, callback) => {
+            if (!origin || allowedOrigins.includes(origin)) {
+                callback(null, true);
+            } else {
+                callback(new Error("Not allowed by CORS"));
+            }
+        },
         credentials: true,
     })
 );
 
+// Middleware
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 app.use(express.static("public"));
 app.use(cookieParser());
-app.use(morgan("dev")); //HTTP request logger middleware for node.js 
+app.use(morgan("dev"));
 
+// // Health check route
+app.get("/", (req, res) => {
+    res.send("Backend is up and running!");
+});
 
-
-//routes import
-
+// Import Routes
 import userRouter from "./routes/user.routes.js";
 import commentRouter from "./routes/comment.routes.js";
 import likeRouter from "./routes/like.routes.js";
@@ -313,7 +326,7 @@ import healthcheckRouter from "./routes/healthcheck.routes.js";
 import playlistRouter from "./routes/playlist.routes.js";
 import dashboardRouter from "./routes/dashboard.routes.js";
 
-//routes declaration
+// Route Declarations
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/comment", commentRouter);
 app.use("/api/v1/likes", likeRouter);
@@ -324,5 +337,11 @@ app.use("/api/v1/healthcheck", healthcheckRouter);
 app.use("/api/v1/playlist", playlistRouter);
 app.use("/api/v1/dashboard", dashboardRouter);
 
+// Error handling for CORS
+app.use((err, req, res, next) => {
+    if (err.message === "Not allowed by CORS") {
+        return res.status(403).json({ error: "CORS not allowed for this origin" });
+    }
+    next(err);
+});
 
-export default app;
