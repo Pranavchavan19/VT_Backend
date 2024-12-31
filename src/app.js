@@ -286,23 +286,17 @@ import dotenv from "dotenv";
 
 dotenv.config(); // Load environment variables
 
-const app = express();
+
 
 // CORS configuration
-const allowedOrigins = [process.env.CORS_ORIGIN]; // Add your Vercel frontend URL in .env
+const app = express();
+
 app.use(
     cors({
-        origin: (origin, callback) => {
-            if (!origin || allowedOrigins.includes(origin)) {
-                callback(null, true);
-            } else {
-                callback(new Error("Not allowed by CORS"));
-            }
-        },
+        origin: process.env.CORS_ORIGIN,
         credentials: true,
     })
 );
-
 // Middleware
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
