@@ -5,6 +5,7 @@ import ApiResponse from "../utils/ApiResponse.js";
 import mongoose, { isValidObjectId } from "mongoose";
 import { User } from "../models/user.model.js";
 
+
 const createTweet = asyncHandler(async (req, res) => {
     const { content } = req.body;
 
@@ -187,6 +188,7 @@ export const getAllTweets = async (req, res) => {
         res.status(500).json({ error: "Failed to fetch tweets" });
     }
 };
+
 
 
 
