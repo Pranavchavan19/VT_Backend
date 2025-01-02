@@ -175,16 +175,20 @@ const getUserTweets = asyncHandler(async (req, res) => {
 
 
 
+// Controller to fetch all tweets with populated owner (avatar, username)
 export const getAllTweets = async (req, res) => {
     try {
-        // Fetch all tweets and populate the owner field with user data (username, avatar, etc.)
-        const tweets = await Tweet.find().sort({ createdAt: -1 }).populate('owner', 'username avatar');
+        const tweets = await Tweet.find()
+            .populate("owner", "username avatar") // Populate owner with username and avatar
+            .sort({ createdAt: -1 });
         res.status(200).json({ data: tweets });
     } catch (error) {
         console.error("Error fetching tweets:", error);
         res.status(500).json({ error: "Failed to fetch tweets" });
     }
 };
+
+
 
 
 export { createTweet, updateTweet, deleteTweet, getUserTweets };
