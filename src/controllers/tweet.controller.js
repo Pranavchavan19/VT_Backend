@@ -173,13 +173,12 @@ const getUserTweets = asyncHandler(async (req, res) => {
         .json(new ApiResponse(200, tweets, "Tweets fetched successfully"));
 });
 
-// Controller to fetch all tweets
+
+
 export const getAllTweets = async (req, res) => {
     try {
-        const tweets = await Tweet.find()
-            .populate("userId", "username avatar") // Populate username and avatar from User model
-            .sort({ createdAt: -1 }); // Fetch all tweets in descending order
-
+        // Fetch all tweets and populate the owner field with user data (username, avatar, etc.)
+        const tweets = await Tweet.find().sort({ createdAt: -1 }).populate('owner', 'username avatar');
         res.status(200).json({ data: tweets });
     } catch (error) {
         console.error("Error fetching tweets:", error);
